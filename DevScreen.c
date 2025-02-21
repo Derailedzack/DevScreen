@@ -7,7 +7,7 @@ bool ShouldUseGL = false;
 bool RenderLoop = true;
 typedef enum DevVidMode {
 	NONE,
-	BITMAP_800x600_8BPP, //I'm aware that x can also be used as a var but we can't use * as that creates a syntax error. As the star gets treated as multipulication
+	BITMAP_800x600_32BPP, //I'm aware that x can also be used as a var but we can't use * as that creates a syntax error. As the star gets treated as multipulication
 	TEXT_MODE,
 	TILE_MODE
 }DevVidMode;
@@ -90,7 +90,7 @@ void DevScr_Init(DevVidMode screen_mode, unsigned long vram_size) {
 	}
 
 
-	if (GPU_Registers->Screen_Mode != BITMAP_800x600_8BPP) {
+	if (GPU_Registers->Screen_Mode != BITMAP_800x600_32BPP) {
 		TilesGFX_RAM = malloc(sizeof(GPU_Registers->Screen_TileSetDatSize));
 		//TilesRAM = malloc();
 		//SDLScrn = SDL_CreateRGBSurfaceFrom(VRAM, )
@@ -117,7 +117,7 @@ void DevScr_Init(DevVidMode screen_mode, unsigned long vram_size) {
 				exit(-3);
 			}
 			//printf("VRAM:%x\n", VRAM[1]);
-			GPU_Registers->Screen_Mode = BITMAP_800x600_8BPP;
+			GPU_Registers->Screen_Mode = BITMAP_800x600_32BPP;
 		}
 
 	}
@@ -180,7 +180,7 @@ void DevScr_DrawVRAM() {
 	float tex_w = 0;
 	float tex_h = 0;
 	
-	if (GPU_Registers->Screen_Mode == BITMAP_800x600_8BPP) {
+	if (GPU_Registers->Screen_Mode == BITMAP_800x600_32BPP) {
 
 		if (ShouldUseGL) { //So this doesn't work as it's incomplete
 			DevScr_GL_DrawVRAM();
