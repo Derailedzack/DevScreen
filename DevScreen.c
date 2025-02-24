@@ -246,7 +246,7 @@ void DevScr_CreateDisplay(int width, int height, unsigned long vram_size) {
 			}
 			SDL_AddEventWatch(DevScr_EventHook, NULL);
 		//	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "direct3d11");
-			DevScr_Init(BITMAP_800x600_8BPP, vram_size);
+			DevScr_Init(BITMAP_800x600_32BPP, vram_size);
 #ifdef USE_SCRIPT_FOR_DEV_EMU
 			
 			DevScr_BeginRenderLoop();
