@@ -34,6 +34,7 @@ SDL_GLContext* SDLContext;
 SDL_Surface * SDLScrn;
 SDL_Texture* SDLScrnTexture;
 DevScreenRegs* GPU_Registers;
+DevScr_CustomMainUpdate_Func* DevScr_UpdateMain_Ptr;
 int SDLRenderComboVal;
 extern unsigned long m68kClk;
 #ifdef USE_SCRIPT_FOR_DEV_EMU
@@ -79,6 +80,9 @@ void DevScr_EventHook(void* userdata, SDL_Event* event) {
 		}
 	}
 }
+void DevScr_SetCustomMainUpdateCB(DevScr_CustomMainUpdate_Func* mainupdate_cb){
+	DevScr_UpdateMain_Ptr = mainupdate_cb;
+}
 void DevScr_Init(DevVidMode screen_mode, unsigned long vram_size) {
 	GPU_Registers = malloc(sizeof(DevScreenRegs));
 	if (GPU_Registers == NULL) {
@@ -89,7 +93,7 @@ void DevScr_Init(DevVidMode screen_mode, unsigned long vram_size) {
 		GPU_Registers->Screen_Mode = screen_mode;
 	}
 
-
+	DevScr_UpdateMain_Ptr = NULL;
 	if (GPU_Registers->Screen_Mode != BITMAP_800x600_32BPP) {
 		TilesGFX_RAM = malloc(sizeof(GPU_Registers->Screen_TileSetDatSize));
 		//TilesRAM = malloc();
@@ -274,7 +278,9 @@ void DevScr_BeginRenderLoop() {
 			}
 #endif
 			DevScr_DrawVRAM();
-
+			if(DevScr_UpdateMain_Ptr != NULL){
+				DevScr_UpdateMain_Ptr();
+			}
 			
 			SDL_RenderPresent(SDLRenderer);
 			//
